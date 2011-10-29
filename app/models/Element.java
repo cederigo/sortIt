@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PostRemove;
 
 import play.data.validation.MinSize;
 import play.data.validation.Required;
@@ -34,6 +35,13 @@ public class Element extends Model implements Comparable<Element> {
     // find comparisons: me <-> other
 
     return 0;
+  }
+  
+  @PostRemove
+  public void cleanup() {
+    if (blob != null) {
+      blob.getFile().delete();
+    }
   }
   
   public String toString() {
