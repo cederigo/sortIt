@@ -10,6 +10,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PostRemove;
+import javax.persistence.PreRemove;
 
 import play.data.validation.MinSize;
 import play.data.validation.Required;
@@ -19,12 +20,10 @@ import play.db.jpa.Model;
 @Entity
 public class Element extends Model implements Comparable<Element> {
 
-  @Required
   @ManyToOne(fetch = FetchType.LAZY)
   public DataSet set;
     
-  @Required
-  @ManyToMany(cascade=CascadeType.PERSIST)
+  @ManyToMany(cascade=CascadeType.ALL)
   public Set<Attribute> attributes;
 
   @Required

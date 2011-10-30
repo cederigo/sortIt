@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET     /                                       Application.index
+GET     /                                       admin.Home.index
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
@@ -12,7 +12,8 @@ GET     /favicon.ico                            404
 GET     /public/                                staticDir:public
 
 # Import CRUD routes
-*      /admin              module:crud
+*       /admin/?                                admin.Home.index
+*       /admin                                  module:crud
 
 # Catch all
 *       /{controller}/{action}                  {controller}.{action}
