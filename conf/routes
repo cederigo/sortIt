@@ -2,8 +2,15 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
-GET     /                                       admin.Home.index
+# Games
+GET		/{dataSetName}							Memory.index
+
+# DataSets
+GET		/dataSets/{id}							DataSets.get
+
+# Elements
+GET		/elements/{id}							Elements.get
+GET		/elements/{id}/data						Elements.data
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

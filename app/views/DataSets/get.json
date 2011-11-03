@@ -1,0 +1,8 @@
+{
+ "name" : "${set.name}",
+ "eIds" : [ 
+	#{list items:set.elements, as:'e'}
+		${e.id} ${e_isLast ? '':','}
+	#{/list} 
+	]
+}

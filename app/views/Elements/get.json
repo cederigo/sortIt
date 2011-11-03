@@ -1,0 +1,4 @@
+{
+ "id" : "${e.id}",
+ "dataUrl" : "/elements/${e.id}/data"
+}

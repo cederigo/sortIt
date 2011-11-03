@@ -22,8 +22,8 @@ public class Element extends Model implements Comparable<Element> {
 
   @ManyToOne(fetch = FetchType.LAZY)
   public DataSet set;
-    
-  @ManyToMany(cascade=CascadeType.ALL)
+
+  @ManyToMany(cascade = CascadeType.ALL)
   public Set<Attribute> attributes;
 
   @Required
@@ -35,16 +35,16 @@ public class Element extends Model implements Comparable<Element> {
 
     return 0;
   }
-  
+
   @PostRemove
   public void cleanup() {
     if (blob != null) {
       blob.getFile().delete();
     }
   }
-  
+
   public String toString() {
-    return "entry " + id + " [ "+set+" ]";
+    return "entry " + id + " [ " + set + " ]";
   }
 
 }

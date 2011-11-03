@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class DataSet extends Model {
   @Required
   public String name;
 
-  @OneToMany(targetEntity = Element.class, cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(targetEntity = Element.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   public List<Element> elements;
 
   @OneToMany(targetEntity = Relation.class, fetch = FetchType.LAZY)
@@ -37,9 +38,20 @@ public class DataSet extends Model {
     return name;
   }
 
-  public boolean addElements(Collection<File> files,
-      Set<Attribute> elementAttributes, String blobType)
-      throws FileNotFoundException {
+  public List<Element> randomElements(int limit) {
+    List<Element> result = new LinkedList<Element>();
+
+    for (int i = 0; i < limit; i++) {
+      int rIdx = (int) (Math.random() * elements.size());
+      result.add(elements.get(rIdx));
+    }
+
+    return result;
+
+  }
+
+  public boolean addElements(Collection<File> files, Set<Attribute> elementAttributes,
+      String blobType) throws FileNotFoundException {
 
     FileInputStream fis = null;
 
