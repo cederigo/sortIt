@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -33,18 +35,17 @@ public class Relation extends Model {
     return a + " <-> " + b;
   }
   
-  /**
-   * Get a Relation for Element a and b.
-   * Create one if it does not exist.
-   * Note that the order of param a and b does not matter.
-   * 
-   * @param a
-   * @param b
-   * @return a Relation in any case
-   */
-  public static Relation get(Element a, Element b) {
+  public static Relation withMostVotes(Element e) {
+
+    String query = "select r from Relation r where r.a = ? or r.b = ? order by r.votes";
+
+    return Relation.find(query, e, e).first();
+
+  }  
+ 
+  public static boolean vote(Element a, Element b, boolean isForA) {
     
-    if( a.id == b.id) return null;
+    if( a.id == b.id) return false;
     
     String query = "select r from Relation r where r.a = ? and r.b = ?";
     Relation r = Relation.find(query, a,b).first();
@@ -52,29 +53,27 @@ public class Relation extends Model {
     if( r == null) {
       /*switch a<->b*/
       r = Relation.find(query, b,a).first();
-      if (r == null) {
-        /*create a new one*/
+      if (r != null) {
+        /*switch vote*/
+        isForA = !isForA;
+      } else {
         r = new Relation();
         r.a = a;
         r.b = b;
         r.set = a.set;
-        r.value = 0;
-        r.validateAndSave();
+        r.set.relations.add(r);
       }
     }
     
-    return r;
+    return r.vote(isForA);
+    
   }
   
-  /**
-   * Decide a or b for a given Attribute. 
-   * 
-   * @param isForA when you are for a ;-)
-   */
-  public void vote(boolean isForA) {
+  
+  private boolean vote(boolean isForA) {
     value += (isForA ? 1 : -1);
     votes++;
-    save();
+    return validateAndSave();
   }
   
 

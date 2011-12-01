@@ -92,57 +92,66 @@ public class DataSet extends Model {
     return validateAndSave();
   }
   
+  
+  
   /**
-   * We have a problem here. currently its O(n^2)
+   * We have a problem here. Its not really performant
    */
   public void reorder() {
         
-    List<Element> oEls = orderedElements(-1);
-    List<Element> result = new LinkedList<Element>();
-    Relation relCandidate;
+    List<Long> result = new LinkedList<Long>();
     Relation rel = null;
     
-    if (oEls.size() == 0) {
-      /*first ordering*/
-      oEls = elements;
-    }
-    
-    result = new LinkedList<Element>(oEls);
-    
-    for (Element oEl : oEls) {
-      /* choose the relation with the most votes*/
-      for (Element e : elements) {
-        if (e.id == oEl.id) continue;
-        relCandidate = Relation.get(e, oEl);
-        rel = (rel == null ? relCandidate : 
-          (rel.votes < relCandidate.votes ? relCandidate : rel));
-      }
+    for (Element e : elements) {
+      rel = Relation.withMostVotes(e);
+      if (rel == null) continue;
       
-      int idxA = result.indexOf(rel.a);
-      int idxB = result.indexOf(rel.b);
+      int idxA = result.indexOf(rel.a.id);
+      int idxB = result.indexOf(rel.b.id);
       
-      if ( ((idxA - idxB) > 0 && rel.value > 0) || (idxA -idxB) < 0 && rel.value < 0 ){
-        /*correctly ordered*/
-      } else {
-        result.remove(idxB);
-        if (rel.value > 0) result.add(idxA, rel.b);
-        else {
-          if (idxA + 1 < result.size())
-            result.add(idxA + 1 , rel.b);
-          else
-            result.add(rel.b);
+      if (idxA >= 0 && idxB >= 0) {
+        //both already inside, check if still correct
+        if ((rel.value > 0 && (idxB - idxA) > 0) || (rel.value < 0 && (idxB - idxA) < 0)) {
+          //correct, do nothing
+        } else {
+          result.remove(idxB);
+          if (rel.value > 0) addWithCheck(result, idxA + 1, rel.b.id);
+          else addWithCheck(result,idxA,rel.b.id);
         }
+      } else if(idxA >= 0 && idxB < 0) {
+        //a is inside
+        if (rel.value > 0) addWithCheck(result, idxA + 1, rel.b.id);
+        else addWithCheck(result,idxA,rel.b.id);
+        
+      } else if(idxB >= 0 && idxA < 0) {
+        //b is inside
+        if (rel.value > 0) addWithCheck(result, idxB, rel.a.id);
+        else addWithCheck(result,idxB + 1,rel.a.id);
+        
+      } else {
+        //none is inside, add them at the end
+        result.add(rel.a.id);
+        if (rel.value > 0) result.add(rel.b.id); 
+        else result.add(result.size()-1, rel.b.id);
       }
-           
     }
+    Logger.info("ordered %s elements",result.size());
     
     //update elements
     for (int i = 0; i < result.size(); i++) {
-      Element e = result.get(i);
+      Element e = Element.findById(result.get(i));
       e.pos = i;
       e.save();
     }
     
+  }
+  
+  private void addWithCheck(List dest, int idx, Object el ) {
+    if (idx < dest.size() - 1 && idx >= 0) {
+      dest.add(idx, el);
+    } else {
+      dest.add(el);
+    }
   }
 
 }

@@ -37,7 +37,7 @@
     var cEl = dataSet.eIds[currentIdx];
     
     $.ajax({
-      url: '/relations/add',
+      url: '/relations/vote',
       data: {aId: cEl, bId: lEl, isForA: isForCurrent},
       success : function(data, textStatus, req) {
         console.log("relation successfully added");
