@@ -1,6 +1,8 @@
 (function() {
 
-  var dataSet, currentIdx;
+  var dataSet,
+    currentIdx,
+    lastIdx;
 
   var init = function(setId) {
     dataSet = null;
@@ -29,6 +31,22 @@
     img.attr('src', '/elements/' + eId + '/data');
     $("#image").replaceWith(img);
 
+  }, vote = function(isForCurrent) {
+    
+    var lEl = dataSet.eIds[lastIdx];
+    var cEl = dataSet.eIds[currentIdx];
+    
+    $.ajax({
+      url: '/relations/add',
+      data: {aId: cEl, bId: lEl, isForA: isForCurrent},
+      success : function(data, textStatus, req) {
+        console.log("relation successfully added");
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log("faled to add relation! " + textStatus);
+      }
+    });
+    
   };
 
   window.sortIt = this;
@@ -43,13 +61,28 @@
     if (!dataSet) {
       return;
     }
-
-    var rIdx = Math.floor(Math.random() * (dataSet.eIds.length + 1));
+    
+    lastIdx = currentIdx;
+    var rIdx = Math.floor(Math.random() * (dataSet.eIds.length));
     var eId = dataSet.eIds[rIdx];
     loadImage(eId);
-    currentIdx = eId;
+    currentIdx = rIdx;
 
   };
+  
+  this.yes = function() {
+    if(currentIdx != null && lastIdx != null) {
+      vote(true);
+    }
+    next();
+  };
+  
+  this.no = function() {
+    if(currentIdx != null && lastIdx != null) {
+      vote(false);
+    }
+    next();
+  }
 
   this.skip = function() {
     if (currentIdx) {

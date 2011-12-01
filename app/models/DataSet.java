@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.io.IOUtils;
+import org.hibernate.annotations.FetchMode;
 
 import play.Logger;
 import play.data.validation.Required;
@@ -31,7 +32,7 @@ public class DataSet extends Model {
   @OneToMany(targetEntity = Element.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   public List<Element> elements;
 
-  @OneToMany(targetEntity = Relation.class, fetch = FetchType.LAZY)
+  @OneToMany(targetEntity = Relation.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   public List<Relation> relations;
 
   public String toString() {
@@ -48,6 +49,21 @@ public class DataSet extends Model {
 
     return result;
 
+  }
+  
+  public List<Element> orderedElements(int limit) {
+    
+    String query = "select e from Element e where e.pos != -1 and e.set = ? order by e.pos";
+    
+    List<Element> result;
+    
+    if (limit > 0) {
+      result = DataSet.find(query, this).fetch(limit); 
+    } else {
+      result = DataSet.find(query, this).fetch();
+    }
+    
+    return result; 
   }
 
   public boolean addElements(Collection<File> files, Set<Attribute> elementAttributes,
@@ -73,9 +89,60 @@ public class DataSet extends Model {
         IOUtils.closeQuietly(fis);
       }
     }
-
     return validateAndSave();
-
+  }
+  
+  /**
+   * We have a problem here. currently its O(n^2)
+   */
+  public void reorder() {
+        
+    List<Element> oEls = orderedElements(-1);
+    List<Element> result = new LinkedList<Element>();
+    Relation relCandidate;
+    Relation rel = null;
+    
+    if (oEls.size() == 0) {
+      /*first ordering*/
+      oEls = elements;
+    }
+    
+    result = new LinkedList<Element>(oEls);
+    
+    for (Element oEl : oEls) {
+      /* choose the relation with the most votes*/
+      for (Element e : elements) {
+        if (e.id == oEl.id) continue;
+        relCandidate = Relation.get(e, oEl);
+        rel = (rel == null ? relCandidate : 
+          (rel.votes < relCandidate.votes ? relCandidate : rel));
+      }
+      
+      int idxA = result.indexOf(rel.a);
+      int idxB = result.indexOf(rel.b);
+      
+      if ( ((idxA - idxB) > 0 && rel.value > 0) || (idxA -idxB) < 0 && rel.value < 0 ){
+        /*correctly ordered*/
+      } else {
+        result.remove(idxB);
+        if (rel.value > 0) result.add(idxA, rel.b);
+        else {
+          if (idxA + 1 < result.size())
+            result.add(idxA + 1 , rel.b);
+          else
+            result.add(rel.b);
+        }
+      }
+           
+    }
+    
+    //update elements
+    for (int i = 0; i < result.size(); i++) {
+      Element e = result.get(i);
+      e.pos = i;
+      e.save();
+    }
+    
   }
 
 }

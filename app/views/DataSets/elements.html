@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Sorted Elements of DataSet ${name}</title>
+  
+</head>
+<body>
+
+  <h1>Ordered Elements of DataSet ${name}</h1>
+  
+  #{list items: els, as: 'e'}
+    <img src="/elements/${e.id}/data"/>
+  #{/list}
+
+</body>
+</html>

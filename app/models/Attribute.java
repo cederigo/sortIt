@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import play.data.validation.Required;
@@ -17,6 +18,9 @@ public class Attribute extends Model {
 
   @ManyToMany(cascade=CascadeType.ALL)
   public Set<Element> elements;
+  
+  @OneToMany(cascade=CascadeType.ALL)
+  public Set<Relation> relations;
   
   @Required
   public String name;

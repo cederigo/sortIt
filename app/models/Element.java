@@ -20,7 +20,7 @@ import play.db.jpa.Model;
 @Entity
 public class Element extends Model implements Comparable<Element> {
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   public DataSet set;
 
   @ManyToMany(cascade = CascadeType.ALL)
@@ -28,12 +28,12 @@ public class Element extends Model implements Comparable<Element> {
 
   @Required
   public Blob blob;
+  
+  public int pos = -1;
 
   @Override
   public int compareTo(Element other) {
-    // find comparisons: me <-> other
-
-    return 0;
+    return other.pos > pos ? 1 : -1;
   }
 
   @PostRemove

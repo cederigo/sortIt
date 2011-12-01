@@ -6,11 +6,15 @@
 GET		/{dataSetName}							Memory.index
 
 # DataSets
+GET		/dataSets/{id}/elements					DataSets.elements
 GET		/dataSets/{id}							DataSets.get
 
 # Elements
 GET		/elements/{id}							Elements.get
 GET		/elements/{id}/data						Elements.data
+
+# Relations
+POST	/relations/add							Relations.add
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
