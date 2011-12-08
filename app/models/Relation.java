@@ -125,6 +125,7 @@ public class Relation extends Model {
         r.set = a.set;
         r.set.relations.add(r);
         r.validateAndCreate();
+        r.set.validateAndSave();
       }
     }
     return r;
