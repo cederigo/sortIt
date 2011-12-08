@@ -12,29 +12,26 @@ import javax.persistence.OneToMany;
 import javax.persistence.PostRemove;
 import javax.persistence.PreRemove;
 
+import org.hibernate.annotations.Cascade;
+
 import play.data.validation.MinSize;
 import play.data.validation.Required;
 import play.db.jpa.Blob;
 import play.db.jpa.Model;
 
 @Entity
-public class Element extends Model implements Comparable<Element> {
+public class Element extends Model {
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   public DataSet set;
 
   @ManyToMany(cascade = CascadeType.ALL)
   public Set<Attribute> attributes;
-
+  
   @Required
   public Blob blob;
   
   public int pos = -1;
-
-  @Override
-  public int compareTo(Element other) {
-    return other.pos > pos ? 1 : -1;
-  }
 
   @PostRemove
   public void cleanup() {

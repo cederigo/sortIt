@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.UniqueConstraint;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.annotations.FetchMode;
 
@@ -22,6 +25,7 @@ import play.Logger;
 import play.data.validation.Required;
 import play.db.jpa.Blob;
 import play.db.jpa.Model;
+import sortIt.DataSorter;
 
 @Entity
 public class DataSet extends Model {
@@ -31,8 +35,8 @@ public class DataSet extends Model {
 
   @OneToMany(targetEntity = Element.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   public List<Element> elements;
-
-  @OneToMany(targetEntity = Relation.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  
+  @OneToMany(targetEntity = Relation.class, fetch = FetchType.LAZY)
   public List<Relation> relations;
 
   public String toString() {
@@ -51,19 +55,24 @@ public class DataSet extends Model {
 
   }
   
+  public void doSort(DataSorter sorter) {
+    sorter.doSort(elements,relations);
+    save();
+  }
+
   public List<Element> orderedElements(int limit) {
-    
+
     String query = "select e from Element e where e.pos != -1 and e.set = ? order by e.pos";
-    
+
     List<Element> result;
-    
+
     if (limit > 0) {
-      result = DataSet.find(query, this).fetch(limit); 
+      result = DataSet.find(query, this).fetch(limit);
     } else {
       result = DataSet.find(query, this).fetch();
     }
-    
-    return result; 
+
+    return result;
   }
 
   public boolean addElements(Collection<File> files, Set<Attribute> elementAttributes,
@@ -90,68 +99,6 @@ public class DataSet extends Model {
       }
     }
     return validateAndSave();
-  }
-  
-  
-  
-  /**
-   * We have a problem here. Its not really performant
-   */
-  public void reorder() {
-        
-    List<Long> result = new LinkedList<Long>();
-    Relation rel = null;
-    
-    for (Element e : elements) {
-      rel = Relation.withMostVotes(e);
-      if (rel == null) continue;
-      
-      int idxA = result.indexOf(rel.a.id);
-      int idxB = result.indexOf(rel.b.id);
-      
-      if (idxA >= 0 && idxB >= 0) {
-        //both already inside, check if still correct
-        if ((rel.value > 0 && (idxB - idxA) > 0) || (rel.value < 0 && (idxB - idxA) < 0)) {
-          //correct, do nothing
-        } else {
-          result.remove(idxB);
-          if (rel.value > 0) addWithCheck(result, idxA + 1, rel.b.id);
-          else addWithCheck(result,idxA,rel.b.id);
-        }
-      } else if(idxA >= 0 && idxB < 0) {
-        //a is inside
-        if (rel.value > 0) addWithCheck(result, idxA + 1, rel.b.id);
-        else addWithCheck(result,idxA,rel.b.id);
-        
-      } else if(idxB >= 0 && idxA < 0) {
-        //b is inside
-        if (rel.value > 0) addWithCheck(result, idxB, rel.a.id);
-        else addWithCheck(result,idxB + 1,rel.a.id);
-        
-      } else {
-        //none is inside, add them at the end
-        result.add(rel.a.id);
-        if (rel.value > 0) result.add(rel.b.id); 
-        else result.add(result.size()-1, rel.b.id);
-      }
-    }
-    Logger.info("ordered %s elements",result.size());
-    
-    //update elements
-    for (int i = 0; i < result.size(); i++) {
-      Element e = Element.findById(result.get(i));
-      e.pos = i;
-      e.save();
-    }
-    
-  }
-  
-  private void addWithCheck(List dest, int idx, Object el ) {
-    if (idx < dest.size() - 1 && idx >= 0) {
-      dest.add(idx, el);
-    } else {
-      dest.add(el);
-    }
-  }
+  }  
 
 }
