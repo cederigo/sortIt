@@ -1,0 +1,231 @@
+/*	Less Framework 4 with 16/24 type presets
+	http://lessframework.com
+	by Joni Korpi
+	License: http://opensource.org/licenses/mit-license.php	*/
+
+/*	Resets
+	------	*/
+html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,
+p,blockquote,pre,a,abbr,address,cite,code,del,dfn,em,
+img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,hr,dl,
+dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,
+tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,
+figure,figcaption,hgroup,menu,footer,header,nav,section,
+summary,time,mark,audio,video
+  {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+article,aside,canvas,figure,figure img,figcaption,hgroup,footer,header,nav,section,audio,video {
+  display: block;
+}
+
+a img {
+  border: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+/*	Typography presets
+	------------------	*/
+.gigantic {
+  font-size: 110px;
+  line-height: 120px;
+  letter-spacing: -2px;
+}
+
+.huge,h1 {
+  font-size: 68px;
+  line-height: 72px;
+  letter-spacing: -1px;
+}
+
+.large,h2 {
+  font-size: 42px;
+  line-height: 48px;
+}
+
+.bigger,h3 {
+  font-size: 26px;
+  line-height: 36px;
+}
+
+.big,h4 {
+  font-size: 22px;
+  line-height: 30px;
+}
+
+body {
+  font: 16px/24px "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+.small,small {
+  font-size: 13px;
+  line-height: 18px;
+}
+
+/* Selection colours (easy to forget) */
+::selection {
+  background: rgb(255, 255, 158);
+}
+
+::-moz-selection {
+  background: rgb(255, 255, 158);
+}
+
+img::selection {
+  background: transparent;
+}
+
+img::-moz-selection {
+  background: transparent;
+}
+
+body {
+  -webkit-tap-highlight-color: rgb(255, 255, 158);
+}
+
+/*buttons*/
+.button, button {
+  border: 1px solid rgba(0,0,0,0);
+  background: #d7d7d7;
+  background: -webkit-linear-gradient(top, #ffffff, #d7d7d7) no-repeat;
+  background: -moz-linear-gradient(top, #ffffff, #d7d7d7) no-repeat;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#d7d7d7') no-repeat; /* for IE */
+  padding: 6px 20px;
+  
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  
+  color: #6f6f6f;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+.button:hover, button:hover {
+  text-shadow: 0px 1px 2px rgba(0,0,0,0.17);
+  border: 1px solid rgba(0,0,0,0.2);
+}
+
+.button:active, button:active {
+  background: #d4d4d4;
+}
+
+/*		Default Layout: 648px. 
+		Gutters: 20px
+		Outer margins: 40px.
+		Leftover space for scrollbars @760px: 32px.
+-----------------------------------
+cols    1     2      3      4      
+px      40    202    364    526 */
+body {
+  padding: 72px 40px 84px;
+  background: rgb(255, 255, 255);
+  color: rgb(60, 60, 60);
+  -webkit-text-size-adjust: 100%;
+  /* Stops Mobile Safari from auto-adjusting font-sizes */
+}
+
+#wrapper {
+  margin: 0 auto;
+  width: 688px;
+  position: relative;
+  border: 1px solid white;
+  /* shadows*/
+  box-shadow:0px 0px 7px rgba(0,0,0,0.17);
+  -moz-box-shadow:0px 0px 7px rgba(0,0,0,0.17);
+  -webkit-box-shadow:0px 0px 7px rgba(0,0,0,0.17);
+}
+
+#content, header {
+  margin: 0 auto;
+  width: 648px;
+  position: relative;
+  padding-bottom: 64px; /*for footer*/
+}
+
+header {
+  padding: 36px 0px 36px 0px;
+}
+
+
+footer {
+  height: 64px;
+  width: inherit;
+  position: absolute;
+  bottom: 0px;
+  
+}
+
+footer .footer-inner {
+  padding: 32px 20px 0px;
+}
+
+footer .link {
+  color: rgb(60, 60, 60);
+  font-style: italic;
+  padding-left: 10px;
+}
+
+footer .link.first {
+  padding-left: 0px;
+}
+
+/*common stuff*/
+.title {
+  color: #747474;
+}
+
+/*game*/
+#image-outer {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+#image-outer {
+  border: 1px solid #747474;
+  position: relative;
+}
+
+#image-outer #image {
+  position: absolute;
+}
+
+
+#button-outer {
+  display: block;
+  text-align: center;
+  padding-top: 20px;
+}
+
+/*		Mobile Layout: 320px.
+		Gutters: 24px.
+		Outer margins: 34px.
+		Inherits styles from: Default Layout.
+---------------------------------------------
+cols    1     2      3
+px      68    160    252    */
+@media only screen and (max-width: 600px) {
+  body {
+    width: 252px;
+    padding: 48px 34px 60px;
+  }
+}
+
+
+/*	Retina media query.
+	Overrides styles for devices with a 
+	device-pixel-ratio of 2+, such as iPhone 4.
+-----------------------------------------------    */
+@media only screen and (-webkit-min-device-pixel-ratio: 2) , only screen and
+  (min-device-pixel-ratio: 2) {
+  body {
+    
+  }
+}

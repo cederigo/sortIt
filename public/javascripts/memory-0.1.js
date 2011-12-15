@@ -27,8 +27,21 @@
   }, loadImage = function(eId) {
 
     var img = $("<img>");
+   
     img.attr('id', 'image');
     img.attr('src', '/elements/' + eId + '/data');
+    img.hide();
+    img.load(function() {
+      /*center it*/
+      var w = img.width(), h = img.height();
+      var pw = img.parent().css('width'),ph = img.parent().css('height');
+      img.css({
+        left: (parseInt(pw) - w) / 2 + 'px',
+        top:  (parseInt(ph) - h) / 2 + 'px'
+      });
+      img.show();
+    });
+    
     $("#image").replaceWith(img);
 
   }, vote = function(isForCurrent) {

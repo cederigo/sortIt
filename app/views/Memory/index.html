@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>Memory Game</title>
   
+  <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/main-16px.css'}">
+       
   <script src="@{'/public/javascripts/jquery-1.5.2.min.js'}"
     type="text/javascript" charset="utf-8"></script>  
   
@@ -20,19 +22,37 @@
 </head>
 <body>
 
-
-  <h1>Welcome to the Memory Game</h1>
-  <h2>How it works</h2>
-  <p>Have a look at the face and tell me: Is the actual person older than the previous one??</p>
-
-  <img id="image"></img>
+<div id="wrapper">
+  <header>
+    <h1>SortIt</h1>
+    <h3>Help us sorting</h3>
+    <p>Have a look at the face and tell me: Is the actual person older than the previous one??</p>  
+  </header>
+  <div id="content">
+    
+    <div id="image-outer">
+      <!-- loaded by js -->
+      <img id="image"></img>
+    </div>
+    
+    
+    <div id="button-outer">
+        <button id="yes" onclick="sortIt.yes();">Yes</button>
+        <button id="no" onclick="sortIt.no();">No</button>
+        <button id="skip" onclick="sortIt.next();">Skip</button>
+    </div>
   
-  <br/><br>
+  </div>
+  <footer>
+    <div class="footer-inner">
+      <span class="small">
+       Social Computing Project. Rashmi Bakshi, Cédric Reginster. 2011. 
+       <a class="link" href="http://www.unibnf.ch">http://www.unibnf.ch</a>
+      </span> 
+    </div>
+  </footer>
+</div>
 
-  <button id="next" onclick="sortIt.next();">Next</button>
-  <button id="yes" onclick="sortIt.yes();">Yes</button>
-  <button id="no" onclick="sortIt.no();">No</button>
-  <button id="skip" onclick="sortIt.skip();">Skip</button>
 
 
 </body>

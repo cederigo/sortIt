@@ -14,7 +14,6 @@ public class InsertionSort implements DataSorter {
 
   @Override
   public void doSort(List<Element> elements, List<Relation> relations) {
-    /* copy of unordered list */
 
     /* Insertion sort. O(n^2) */
     for (int p = 1; p < elements.size(); p++) {
@@ -26,7 +25,7 @@ public class InsertionSort implements DataSorter {
       for (int i = 0; i < p; i++) {
         /* i to p is sorted, do we have a relation saying where to insert */
         Element me = elements.get(i);
-        Relation r = Relation.findIn(relations,pe, me);
+        Relation r = Relation.findIn(relations, pe, me);
         if (r != null) {
           candidates.get(r.valueFor(pe)).add(r);
         }
@@ -47,16 +46,16 @@ public class InsertionSort implements DataSorter {
         Logger.debug("no decision for %s", pe);
       }
     }
-    
-    /*update positions*/
+
+    /* update positions */
     int i = 0;
     for (Element e : elements) {
       e.pos = i++;
     }
-    
+
   }
-  
-  /*helpers*/
+
+  /* helpers */
   private void addWithCheck(List dest, int idx, Object el) {
     if (idx < dest.size() - 1 && idx >= 0) {
       dest.add(idx, el);
