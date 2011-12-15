@@ -20,6 +20,11 @@ import play.libs.Files;
 import controllers.CRUD;
 
 public class DataSets extends CRUD {
+  
+  public static void importFromFlickr() {
+    
+  }
+  
 
   public static void importZip(File zip, long setId, long[] attributeIds) throws IOException {
     

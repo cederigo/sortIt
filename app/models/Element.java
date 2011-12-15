@@ -1,5 +1,6 @@
 package models;
 
+import java.net.URL;
 import java.util.List;
 import java.util.Set;
 
@@ -28,8 +29,9 @@ public class Element extends Model {
   @ManyToMany(cascade = CascadeType.ALL)
   public Set<Attribute> attributes;
   
-  @Required
   public Blob blob;
+  //or
+  public String url;
   
   public int pos = -1;
 

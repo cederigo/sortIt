@@ -10,7 +10,17 @@ public class Elements extends Controller {
   /* data */
   public static void data(long id) {
     Element e = Element.findById(id);
-    renderBinary(e.blob.get(), "el-" + e.id, e.blob.type(), true);
+    
+    if (e == null) {
+      error("element with id:" + id + " not found");
+    } else {
+      if (e.blob != null) {
+        renderBinary(e.blob.get(), "el-" + e.id, e.blob.type(), true);
+      } else {
+        renderText(e.url);
+      }
+    }
+    
   }
 
 }

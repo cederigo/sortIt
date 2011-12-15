@@ -74,6 +74,18 @@ public class DataSet extends Model {
 
     return result;
   }
+  
+  public boolean addElements(Collection<String> urls) {
+    for (String url : urls) {
+      Element e = new Element();
+      e.set = this;
+      e.url = url;
+      elements.add(e);
+      
+    }
+    return validateAndSave();
+  }
+  
 
   public boolean addElements(Collection<File> files, Set<Attribute> elementAttributes,
       String blobType) throws FileNotFoundException {
