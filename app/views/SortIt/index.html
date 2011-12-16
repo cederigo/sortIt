@@ -1,0 +1,47 @@
+#{extends 'main.html'/}
+
+#{set 'subTitle'} Admin #{/set}
+
+<h4>Sets</h4>
+<form id="form_create" method="post" action="@{DataSets.create()}">
+  #{field 'name'}
+    <div class="field inline">
+      <label for="${field.id}">Name</label> 
+      <input id="${field.id}" type="text" name="${field.name}"/>
+      <input type="submit" value="Create"/>
+    </div>
+  #{/field}
+</form>
+<br/>
+
+<ul id="sets-outer">
+  #{list items:sets, as:'set' }
+    <li class="set">
+      ${set.name}(${set.elements.size()}), <a href="@{DataSets.delete(set.id)}">delete</a>
+    </li>    
+  #{/list} 
+</ul>
+
+<h4>Import</h4>
+#{form @DataSets.doImport(), id:'importForm'} 
+    #{field 'setId'}
+      <div class="field">
+        <label for="${field.id}">DataSet</label>
+        <select id="${field.id}" name="${field.name}">
+          #{list items:sets, as:'set'}
+              <option value="${set.id}">${set}</option>
+          #{/list}
+        </select> 
+      </div>
+    #{/field}
+    #{field 'tag'}
+      <div class="field">
+        <label for="${field.id}">Tag</label> 
+        <input id="${field.id}" type="text" name="${field.name}"/>
+        (100 Images from Flickr.)
+      </div>
+    #{/field}
+    
+    <input class="button" type="submit" value="Submit"/>
+     
+#{/form} 
