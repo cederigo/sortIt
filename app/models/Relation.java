@@ -6,6 +6,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -83,6 +84,13 @@ public class Relation extends Model {
     return votesForA + votesForB;
   }
   
+  @PreRemove
+  public void detatch() {
+    a.set.relations.remove(this);
+    a = null; b= null;
+  }
+  
+  
   public static Relation findIn(List<Relation> list, Element a, Element b) {
     for (Relation r : list) {
       if (r.a.equals(a) || r.b.equals(a)) {
@@ -107,6 +115,7 @@ public class Relation extends Model {
     }
 
   }
+  
   
   /* Private */
   private static Relation get(Element a, Element b) {

@@ -15,6 +15,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
 import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.collections.map.HashedMap;
@@ -24,6 +25,7 @@ import org.hibernate.annotations.FetchMode;
 import play.Logger;
 import play.data.validation.Required;
 import play.db.jpa.Blob;
+import play.db.jpa.JPA;
 import play.db.jpa.Model;
 import sortIt.DataSorter;
 
@@ -33,12 +35,13 @@ public class DataSet extends Model {
   @Required
   public String name;
 
-  @OneToMany(targetEntity = Element.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(cascade = {CascadeType.PERSIST}, orphanRemoval=true)
   public List<Element> elements;
-  
-  @OneToMany(targetEntity = Relation.class, fetch = FetchType.LAZY)
+
+  @OneToMany(cascade = CascadeType.ALL)
   public List<Relation> relations;
 
+  
   public String toString() {
     return name;
   }
@@ -54,9 +57,9 @@ public class DataSet extends Model {
     return result;
 
   }
-  
+
   public void doSort(DataSorter sorter) {
-    sorter.doSort(elements,relations);
+    sorter.doSort(elements, relations);
     save();
   }
 
@@ -74,43 +77,26 @@ public class DataSet extends Model {
 
     return result;
   }
-  
-  public boolean addElements(Collection<String> urls) {
-    for (String url : urls) {
+
+  public boolean addElements(Collection<String> values, List<Attribute> attributes) {
+    for (String url : values) {
       Element e = new Element();
-      e.set = this;
-      e.url = url;
-      elements.add(e);
       
+      e.value = url;
+      e.attributes = attributes;
+      elements.add(e);
+
     }
     return validateAndSave();
   }
   
-
-  public boolean addElements(Collection<File> files, Set<Attribute> elementAttributes,
-      String blobType) throws FileNotFoundException {
-
-    FileInputStream fis = null;
-
-    for (File f : files) {
-
-      try {
-        fis = new FileInputStream(f);
-        Blob b = new Blob();
-        b.set(fis, blobType);
-        Element e = new Element();
-        e.blob = b;
-        if (elementAttributes.size() > 0) {
-          e.attributes = elementAttributes;
-        }
-        e.set = this;
-        elements.add(e);
-
-      } finally {
-        IOUtils.closeQuietly(fis);
-      }
-    }
-    return validateAndSave();
-  }  
+  public static DataSet delete(long id) {
+    DataSet set = DataSet.findById(id);
+    if (set == null) return null;    
+        
+    return set.delete();
+    
+    
+  }
 
 }

@@ -89,6 +89,30 @@ body {
   -webkit-tap-highlight-color: rgb(255, 255, 158);
 }
 
+
+
+.title {
+  color: #747474;
+}
+
+.inline {
+  display: inline;
+}
+
+.flash {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.flash.error {
+  background-color: red;
+}
+.flash.success {
+  background-color: green;
+}
+
+
+
 /*buttons*/
 .button, button {
   border: 1px solid rgba(0,0,0,0);
@@ -176,10 +200,6 @@ footer .link.first {
   padding-left: 0px;
 }
 
-/*common stuff*/
-.title {
-  color: #747474;
-}
 
 /*Memory*/
 #image-outer {

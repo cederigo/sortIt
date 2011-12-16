@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 
@@ -22,23 +21,8 @@ import sortIt.flickr.Photos.Photo;
 
 public class Importer {
   
-  
-  
-  public static boolean fromZip(DataSet set, File zip, long[] attributeIds) throws IOException {
-    
-    File unzipDest = new File(Play.tmpDir,zip.getName());
-    Files.unzip(zip, unzipDest);
-    
-    boolean success = set.addElements(FileUtils.listFiles(unzipDest, null, true)
-         , getAttributes(attributeIds), "image/jpeg");
-    FileUtils.deleteDirectory(unzipDest);
-    
-    return success;
-  }
-  
-  
 
-  public static boolean taggedWith(DataSet set, String tag) {
+  public static boolean taggedWith(DataSet set, String tag, long[] attributeIds) {
 
     Photos photos = FlickrApi.taggedWith(tag);
 
@@ -51,16 +35,16 @@ public class Importer {
         urls.add(FlickrApi.urlFor(p, "m"));
       }
       
-      return set.addElements(urls);
+      return set.addElements(urls, getAttributes(attributeIds));
     }
     
     return false;
-
+    
   }
   
-  private static Set<Attribute> getAttributes(long[] attributeIds) {
+  private static List<Attribute> getAttributes(long[] attributeIds) {
     
-    Set<Attribute> attributes = new HashSet<Attribute>();
+    List<Attribute> attributes = new LinkedList<Attribute>();
     
     if (attributeIds != null) {
       for(long aId : attributeIds) {
