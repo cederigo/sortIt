@@ -2,12 +2,17 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+GET		/admin									SortIt.index
+
 # Games
 GET		/{dataSetName}							Memory.index
 
 # DataSets
-GET		/dataSets/{id}/elements					DataSets.elements
+POST	/dataSets/create						DataSets.create
+GET		/dataSets/delete/{id}					DataSets.delete
+GET		/dataSets/{name}/elements					DataSets.elements
 GET		/dataSets/{id}							DataSets.get
+*		/dataSets/import						DataSets.doImport
 
 # Elements
 GET		/elements/{id}							Elements.get
@@ -22,9 +27,5 @@ GET     /favicon.ico                            404
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
 
-# Import CRUD routes
-*       /admin/?                                admin.Home.index
-*       /admin                                  module:crud
-
 # Catch all
-*       /{controller}/{action}                  {controller}.{action}
+#*       /{controller}/{action}                  {controller}.{action}
