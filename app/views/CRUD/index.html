@@ -26,7 +26,7 @@
 
   <h3>Import Files</h3>
   <div class="objectForm">
-  #{form @admin.DataSets.importZip(), id:'importForm', enctype:'multipart/form-data'} 
+  #{form @admin.DataSets.doImport(), id:'importForm', enctype:'multipart/form-data'} 
     #{field 'setId'}
       <div class="crudField">
         <label for="${field.id}">DataSet</label>
@@ -43,7 +43,12 @@
         <input id="${field.id}" type="file" name="${field.name}"/>
       </div>
     #{/field}
-    
+    #{field 'tag'}
+      <div class="crudField">
+        <label for="${field.id}">Flickr Image Tag</label> 
+        <input id="${field.id}" type="text" name="${field.name}"/>
+      </div>
+    #{/field}
     #{field 'attributeIds' }
       <div class="crudField">
         <label for="${field.id}"> Attributes </label>

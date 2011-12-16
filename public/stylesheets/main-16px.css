@@ -124,7 +124,7 @@ body {
 cols    1     2      3      4      
 px      40    202    364    526 */
 body {
-  padding: 72px 40px 84px;
+  padding: 20px 40px 0px;
   background: rgb(255, 255, 255);
   color: rgb(60, 60, 60);
   -webkit-text-size-adjust: 100%;
@@ -181,16 +181,16 @@ footer .link.first {
   color: #747474;
 }
 
-/*game*/
+/*Memory*/
 #image-outer {
-  width: 200px;
-  height: 200px;
+  border: 1px solid #747474;
+  position: relative;
+  width: 300px;
+  height: 300px;
   margin: 0 auto;
 }
 
 #image-outer {
-  border: 1px solid #747474;
-  position: relative;
 }
 
 #image-outer #image {

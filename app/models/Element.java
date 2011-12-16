@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
@@ -29,8 +30,10 @@ public class Element extends Model {
   @ManyToMany(cascade = CascadeType.ALL)
   public Set<Attribute> attributes;
   
+  @Column(nullable=true)
   public Blob blob;
   //or
+  @Column(nullable=true)
   public String url;
   
   public int pos = -1;

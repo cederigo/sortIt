@@ -15,55 +15,43 @@ import models.DataSet;
 
 import play.Logger;
 import play.Play;
+import play.data.validation.Required;
 import play.libs.Files;
+import play.mvc.After;
+import sortIt.Importer;
 
 import controllers.CRUD;
 
 public class DataSets extends CRUD {
-  
-  public static void importFromFlickr() {
-    
-  }
-  
 
-  public static void importZip(File zip, long setId, long[] attributeIds) throws IOException {
-    
+  public static void doImport(File zip, long setId, long[] attributeIds, String tag)
+      throws IOException {
+
     DataSet dataSet = DataSet.findById(setId);
-    Set<Attribute> attributes = new HashSet<Attribute>();
-    
-    if (zip == null || dataSet == null) {
-      String msg = "invalid parameters!";
+
+    if (dataSet == null) {
+      String msg = "DataSet with id: " + setId + "not found";
       flash.error(msg);
       CRUD.index();
       return;
     }
-    
-    if (attributeIds != null) {
-      for(long aId : attributeIds) {
-        Attribute a = Attribute.findById(aId);
-        if (a != null) {
-          attributes.add(a);        
-        }
-      }      
+
+    boolean success = true;
+    if (zip != null) {
+      success &= Importer.fromZip(dataSet, zip, attributeIds);
     }
-      
-    File unzipDest = new File(Play.tmpDir,zip.getName());
-    Files.unzip(zip, unzipDest);
-    
-    boolean success = dataSet.addElements(FileUtils.listFiles(unzipDest, null, true)
-         , attributes, "image/jpeg");
-    FileUtils.deleteDirectory(unzipDest);
-    
+    if (tag != null) {
+      success &= Importer.taggedWith(dataSet, tag);
+    }
+
     if (success) {
       flash.success("import into %s successful", dataSet.name);
     } else {
       flash.error("faild to import into %s", dataSet);
     }
-    
+
     CRUD.index();
-    
+
   }
-  
-  
-  
+
 }

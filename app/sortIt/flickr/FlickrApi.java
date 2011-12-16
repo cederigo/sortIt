@@ -36,7 +36,7 @@ public class FlickrApi {
   */
   private static final String IURL_TPL = "http://farm%s.staticflickr.com/%s/%s_%s_%s.jpg";
   
-  public static Photos searchWithTag(String tag) {
+  public static Photos taggedWith(String tag) {
     return getPhotos(API_SEARCH,"&tags=%s",tag);
   }
   

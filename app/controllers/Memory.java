@@ -13,14 +13,16 @@ import play.mvc.Controller;
 public class Memory extends Controller {
 
   public static void index(@Required String dataSetName) {
-    
+
     long setId = -1;
     DataSet dataSet = DataSet.find("name", dataSetName).first();
-    setId = dataSet.id;
-    
+    if (dataSet != null) {
+      setId = dataSet.id;
+    } else {
+      error("no set named '" + dataSetName + "' found");
+    }
     render(setId);
-    
-    
+
   }
 
 }
