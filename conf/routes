@@ -5,7 +5,7 @@
 GET		/admin/?								SortIt.index
 
 # Games
-GET		/{dataSetName}							Memory.index
+*		/{dataSetName}							Memory.index
 
 # DataSets
 POST	/dataSets/create						DataSets.create

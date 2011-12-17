@@ -11,8 +11,7 @@
   
   <script src="@{'/public/javascripts/memory-0.1.js'}"
     type="text/javascript" charset="utf-8"></script>
-
-
+  
   <script type="text/javascript">
   
   	
@@ -35,8 +34,9 @@
         toggleDialog();
       });
       
-      $("button").click( function() {        
-        if (sortIt.done()) {
+      $("button").click( function() {
+        
+        if (sortIt.progress() >= 10) {
           toggleDialog();
         }
       })
@@ -58,7 +58,7 @@
         Thank you very much for playing.<br/>
         You can now see the <a href="@{DataSets.elements(setName)}">result</a> of your and others work<br/>
         Of course you can just keep playing. The more the better ;-)<br/>
-        Maybe you want to invite other people for playing..
+        Maybe you want to <a href="javascript:share()">share</a>. would be very nice..
      </div>
   </div>
   
@@ -86,6 +86,43 @@
     </div>
   </footer>
 </div>
+
+<!-- FB stuff -->
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '${play.configuration.getProperty("fb.api_key")}', // App ID
+      channelUrl : '', // Channel File
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : false  // parse XFBML
+    });
+
+    // Additional initialization code here
+  };
+
+  // Load the SDK Asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     d.getElementsByTagName('head')[0].appendChild(js);
+   }(document));
+  
+  function share() {
+
+    FB.ui({
+      method : 'feed',
+      link : "&{'feed_link'}",
+      picture : "@@{'/public/images/'}/&{'feed_picture'}",
+      name : "&{'feed_name'}",
+      caption : "&{'feed_caption'}",
+      description : "&{'feed_description'}"
+    });
+  }
+</script>
+
 
 
 

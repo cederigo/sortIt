@@ -1,3 +1,12 @@
 # You can specialize this file for each language.
 # For example, for French create a messages.fr file
 #
+
+#FB 'feed' dialog aka Share
+feed_link=https://apps.facebook.com/sortit_/
+feed_picture=feed_picture.jpg
+feed_caption=http://www.facebook.com/sortit_
+
+#Title
+feed_name=I just helped sorting some nice Photos
+feed_description=Wanna try too?

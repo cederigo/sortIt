@@ -104,14 +104,10 @@
       vote(false);
     }
     next();
-  };  
+  };
   
-  this.done = function() {
-    if(votesCollected > 10) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  this.progress = function() {
+    return votesCollected;
+  };
 
 })();
