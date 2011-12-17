@@ -20,6 +20,7 @@ public class OrderJob extends Job {
     List<DataSet> dataSets = DataSet.all().fetch();
     
     for (DataSet ds : dataSets) {
+      Logger.debug("reordering %s", ds.name);
       ds.doSort(sorter);
     }
     

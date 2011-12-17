@@ -10,7 +10,7 @@ GET		/{dataSetName}							Memory.index
 # DataSets
 POST	/dataSets/create						DataSets.create
 GET		/dataSets/delete/{id}					DataSets.delete
-GET		/dataSets/{name}/elements					DataSets.elements
+GET		/dataSets/{name}/elements				DataSets.elements
 GET		/dataSets/{id}							DataSets.get
 *		/dataSets/import						DataSets.doImport
 
@@ -19,7 +19,7 @@ GET		/elements/{id}							Elements.get
 GET		/elements/{id}/data						Elements.data
 
 # Relations
-POST	/relations/add							Relations.add
+GET		/relations/vote							Relations.vote
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

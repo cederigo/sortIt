@@ -27,7 +27,7 @@ import play.db.jpa.Model;
 @Entity
 public class Element extends Model {
 
-  @ManyToOne()
+  @ManyToOne
   public DataSet set;
 
   @ManyToMany(cascade=CascadeType.ALL)

@@ -1,5 +1,6 @@
 {
  "name" : "${set.name}",
+ "id"	: "${set.id}",
  "eIds" : [ 
 	#{list items:set.elements, as:'e'}
 		${e.id} ${e_isLast ? '':','}

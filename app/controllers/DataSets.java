@@ -80,7 +80,7 @@ public class DataSets extends Controller {
       List<Element> els = set.orderedElements(-1);
       render(name,els);
     } else {
-      error("could not find set with id " + name);
+      error("could not find set with name " + name);
     }
     
   }

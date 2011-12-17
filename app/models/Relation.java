@@ -101,12 +101,12 @@ public class Relation extends Model {
     return null;
   }
 
-  public static void vote(Element a, Element b, boolean isForA) {
+  public static void vote(DataSet set, Element a, Element b, boolean isForA) {
 
     if (a.id == b.id)
       return;
 
-    Relation r = get(a, b);
+    Relation r = get(set, a, b);
 
     if (isForA) {
       r.voteFor(a);
@@ -118,7 +118,7 @@ public class Relation extends Model {
   
   
   /* Private */
-  private static Relation get(Element a, Element b) {
+  private static Relation get(DataSet set, Element a, Element b) {
     
     String query = "select r from Relation r where r.a = ? and r.b = ?";
     Relation r = Relation.find(query, a, b).first();
@@ -131,10 +131,8 @@ public class Relation extends Model {
         r = new Relation();
         r.a = a;
         r.b = b;
-        r.set = a.set;
-        r.set.relations.add(r);
-        r.validateAndCreate();
-        r.set.validateAndSave();
+        set.relations.add(r);
+        set.validateAndSave();
       }
     }
     return r;

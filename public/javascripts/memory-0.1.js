@@ -51,7 +51,7 @@
     
     $.ajax({
       url: '/relations/vote',
-      data: {aId: cEl, bId: lEl, isForA: isForCurrent},
+      data: {setId: dataSet.id, aId: cEl, bId: lEl, isForA: isForCurrent},
       success : function(data, textStatus, req) {
         console.log("relation successfully added");
       },

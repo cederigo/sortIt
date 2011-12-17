@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -33,12 +34,13 @@ import sortIt.DataSorter;
 public class DataSet extends Model {
 
   @Required
+  @Column(unique=true)
   public String name;
 
   @OneToMany(cascade = {CascadeType.PERSIST}, orphanRemoval=true)
   public List<Element> elements;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = {CascadeType.PERSIST}, orphanRemoval=true)
   public List<Relation> relations;
 
   
@@ -81,7 +83,7 @@ public class DataSet extends Model {
   public boolean addElements(Collection<String> values, List<Attribute> attributes) {
     for (String url : values) {
       Element e = new Element();
-      
+      e.set = this;
       e.value = url;
       e.attributes = attributes;
       elements.add(e);

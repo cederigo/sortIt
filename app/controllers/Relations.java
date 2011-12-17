@@ -1,5 +1,6 @@
 package controllers;
 
+import models.DataSet;
 import models.Element;
 import models.Relation;
 import play.data.validation.Required;
@@ -7,8 +8,12 @@ import play.mvc.Controller;
 
 public class Relations extends Controller {
 
-  public static void vote(@Required long aId, @Required long bId, @Required boolean isForA) {
+  public static void vote(
+      @Required long setId,
+      @Required long aId, 
+      @Required long bId, @Required boolean isForA) {
 
+    DataSet set = DataSet.findById(setId);
     Element a = Element.findById(aId);
     Element b = Element.findById(bId);
 
@@ -16,7 +21,7 @@ public class Relations extends Controller {
       error("invalid elements: " + aId + "," + bId);
     }
     
-    Relation.vote(a, b, isForA);
+    Relation.vote(set, a, b, isForA);
 
   }
 
