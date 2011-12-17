@@ -90,6 +90,9 @@ public class DataSet extends Model {
   }
 
   public void doSort(DataSorter sorter) {
+    
+    Collections.sort(elements);
+    
     sorter.doSort(elements, relations);
     save();
   }

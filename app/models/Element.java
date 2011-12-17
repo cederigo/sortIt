@@ -25,7 +25,7 @@ import play.db.jpa.Blob;
 import play.db.jpa.Model;
 
 @Entity
-public class Element extends Model {
+public class Element extends Model implements Comparable<Element>{
 
   @ManyToOne
   public DataSet set;
@@ -43,6 +43,11 @@ public class Element extends Model {
 
   public String toString() {
     return "el id:" + id + ", votes:" + votes + ", set: " + set;
+  }
+
+  @Override
+  public int compareTo(Element o) {
+    return pos > o.pos ? 1 : (pos == 0 ? 0 : -1);
   }
  
 }
