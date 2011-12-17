@@ -15,13 +15,15 @@ public class Memory extends Controller {
   public static void index(@Required String dataSetName) {
 
     long setId = -1;
+    String setName = "";
     DataSet dataSet = DataSet.find("name", dataSetName).first();
     if (dataSet != null) {
       setId = dataSet.id;
+      setName = dataSet.name;
     } else {
       error("no set named '" + dataSetName + "' found");
     }
-    render(setId);
+    render(setId, setName);
 
   }
 
