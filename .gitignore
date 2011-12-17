@@ -10,3 +10,4 @@ data/
 javadoc/
 .DS_Store
 logs/
+test-result/
