@@ -2,7 +2,7 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET		/admin									SortIt.index
+GET		/admin/?								SortIt.index
 
 # Games
 GET		/{dataSetName}							Memory.index

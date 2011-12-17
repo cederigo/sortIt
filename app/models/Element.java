@@ -38,9 +38,11 @@ public class Element extends Model {
   
   @Required
   public int pos = -1;
+  
+  public int votes = 0;
 
   public String toString() {
-    return "entry " + id + " [ " + set + " ]";
+    return "el id:" + id + ", votes:" + votes + ", set: " + set;
   }
  
 }

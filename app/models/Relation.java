@@ -16,7 +16,7 @@ import play.db.jpa.Model;
 
 @Entity
 public class Relation extends Model {
-  
+
   @ManyToOne(targetEntity = DataSet.class)
   public DataSet set;
 
@@ -26,13 +26,10 @@ public class Relation extends Model {
   @Required
   @OneToOne
   public Element a;
-  
+
   @Required
   @OneToOne
   public Element b;
-
-  public int votesForA = 0;
-  public int votesForB = 0;
 
   public String toString() {
     return a + " <-> " + b;
@@ -42,7 +39,8 @@ public class Relation extends Model {
    * Return a value that can be used in a comparator.<br/>
    * Compare <code>ref</code> (a or b) to the other (b or a).
    * 
-   * @param ref one of the elements in this relation
+   * @param ref
+   *          one of the elements in this relation
    * @return 1 if ref > other, -1 if ref < other, 0 otherwise
    */
   public int valueFor(Element ref) {
@@ -50,9 +48,9 @@ public class Relation extends Model {
       return 0;
     int res = 0;
     if (ref.equals(a)) {
-      res = votesForA - votesForB;
+      res = a.votes - b.votes;
     } else if (ref.equals(b)) {
-      res = votesForB - votesForA;
+      res = b.votes - a.votes;
     }
     return res == 0 ? 0 : res > 0 ? 1 : -1;
   }
@@ -63,39 +61,51 @@ public class Relation extends Model {
       return;
 
     if (e.equals(a)) {
-      votesForA++;
+      a.votes++;
+      a.save();
     } else if (e.equals(b)) {
-      votesForB++;
+      b.votes++;
+      b.save();
     }
-    save();
   }
-  
+
   public Element getOther(Element e) {
     if (e.equals(a)) {
       return b;
     } else if (e.equals(b)) {
       return a;
     }
-    
+
     return null;
   }
 
-  public int getVotes() {
-    return votesForA + votesForB;
+  public int getVotesFor(Element e) {
+    if (e.equals(a)) {
+      return a.votes;
+    } else if (e.equals(b)) {
+      return b.votes;
+    }
+    return 0;
   }
-  
+
+  public int getVotes() {
+    return a.votes + b.votes;
+  }
+
   @PreRemove
   public void detatch() {
     a.set.relations.remove(this);
-    a = null; b= null;
+    a = null;
+    b = null;
   }
-  
-  
+
   public static Relation findIn(List<Relation> list, Element a, Element b) {
     for (Relation r : list) {
       if (r.a.equals(a) || r.b.equals(a)) {
-        if (r.a.equals(a) && r.b.equals(b)) return r;
-        if (r.b.equals(a) && r.a.equals(b)) return r;
+        if (r.a.equals(a) && r.b.equals(b))
+          return r;
+        if (r.b.equals(a) && r.a.equals(b))
+          return r;
       }
     }
     return null;
@@ -115,20 +125,20 @@ public class Relation extends Model {
     }
 
   }
-  
-  
+
   /* Private */
   private static Relation get(DataSet set, Element a, Element b) {
-    
+
     String query = "select r from Relation r where r.a = ? and r.b = ?";
     Relation r = Relation.find(query, a, b).first();
-    
+
     if (r == null) {
       /* switch a<->b */
       r = Relation.find(query, b, a).first();
       if (r == null) {
         /* implicitly create one */
         r = new Relation();
+        r.set = set;
         r.a = a;
         r.b = b;
         set.relations.add(r);

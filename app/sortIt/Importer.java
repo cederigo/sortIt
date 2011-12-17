@@ -24,7 +24,7 @@ public class Importer {
 
   public static boolean taggedWith(DataSet set, String tag, long[] attributeIds) {
 
-    Photos photos = FlickrApi.taggedWith(tag);
+    Photos photos = FlickrApi.search(tag);
 
     if (photos != null && photos.pages > 0) {
 

@@ -14,13 +14,16 @@
 </form>
 <br/>
 
-<ul id="sets-outer">
+<div id="sets-outer">
   #{list items:sets, as:'set' }
-    <li class="set">
-      ${set.name}(${set.elements.size()}), <a href="@{DataSets.delete(set.id)}">delete</a>
-    </li>    
+    <div class="set">
+      ${set.name}(${set.elements.size()}),
+        <a href="@{Memory.index(set.name)}">Memory</a>,
+        <a href="@{DataSets.elements(set.name)}">list</a>, 
+        <a href="@{DataSets.delete(set.id)}">delete</a>
+    </div>    
   #{/list} 
-</ul>
+</div>
 
 <h4>Import</h4>
 #{form @DataSets.doImport(), id:'importForm'} 

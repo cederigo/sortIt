@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,30 +36,25 @@ import sortIt.DataSorter;
 public class DataSet extends Model {
 
   @Required
-  @Column(unique=true)
+  @Column(unique = true)
   public String name;
 
-  @OneToMany(cascade = {CascadeType.PERSIST}, orphanRemoval=true)
+  @OneToMany(cascade = { CascadeType.PERSIST }, orphanRemoval = true)
   public List<Element> elements;
 
-  @OneToMany(cascade = {CascadeType.PERSIST}, orphanRemoval=true)
+  @OneToMany(cascade = { CascadeType.PERSIST }, orphanRemoval = true)
   public List<Relation> relations;
 
-  
   public String toString() {
     return name;
   }
 
-  public List<Element> randomElements(int limit) {
-    List<Element> result = new LinkedList<Element>();
+  public List<Element> nextElements(int limit) {
 
-    for (int i = 0; i < limit; i++) {
-      int rIdx = (int) (Math.random() * elements.size());
-      result.add(elements.get(rIdx));
-    }
+    List<Element> els = Element.find(
+        "select e from Element e where e.set = ? order by e.votes asc", this).fetch(limit);
 
-    return result;
-
+    return els;
   }
 
   public void doSort(DataSorter sorter) {
@@ -91,14 +88,14 @@ public class DataSet extends Model {
     }
     return validateAndSave();
   }
-  
+
   public static DataSet delete(long id) {
     DataSet set = DataSet.findById(id);
-    if (set == null) return null;    
-        
+    if (set == null)
+      return null;
+
     return set.delete();
-    
-    
+
   }
 
 }
