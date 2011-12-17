@@ -77,6 +77,9 @@
     
     lastIdx = currentIdx;
     var rIdx = Math.floor(Math.random() * (dataSet.eIds.length));
+    while (rIdx == lastIdx) {
+      rIdx = Math.floor(Math.random() * (dataSet.eIds.length));
+    }
     var eId = dataSet.eIds[rIdx];
     loadImage(eId);
     currentIdx = rIdx;

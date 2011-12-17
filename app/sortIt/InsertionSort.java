@@ -48,7 +48,10 @@ public class InsertionSort implements DataSorter {
     /* update positions */
     int i = 0;
     for (Element e : elements) {
-      e.pos = i++;
+      if (e.votes > 0)
+        e.pos = i++;
+      else
+        e.pos = -1;
     }
 
   }
