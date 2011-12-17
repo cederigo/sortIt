@@ -2,11 +2,13 @@
 
   var dataSet,
     currentIdx,
-    lastIdx;
+    lastIdx,
+    votesCollected;
 
   var init = function(setId) {
     dataSet = null;
     currentIdx = null;
+    votesCollected = 0;
 
     $.ajax({
       url : '/dataSets/' + setId,
@@ -54,6 +56,7 @@
       data: {setId: dataSet.id, aId: cEl, bId: lEl, isForA: isForCurrent},
       success : function(data, textStatus, req) {
         console.log("relation successfully added");
+        votesCollected++;
       },
       error: function(jqXHR, textStatus, errorThrown) {
         console.log("faled to add relation! " + textStatus);
@@ -98,7 +101,7 @@
       vote(false);
     }
     next();
-  }
+  };
 
   this.skip = function() {
     if (currentIdx) {
@@ -107,5 +110,13 @@
       next();
     }
   };
+  
+  this.done = function() {
+    if(votesCollected > 10) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
 })();
