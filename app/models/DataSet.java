@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -49,12 +51,42 @@ public class DataSet extends Model {
     return name;
   }
 
-  public List<Element> nextElements(int limit) {
+  public Set<Element> nextElements(int limit) {
 
-    List<Element> els = Element.find(
-        "select e from Element e where e.set = ? order by e.votes asc", this).fetch(limit);
+    /*order matters*/
+    Set<Element> result = new LinkedHashSet<Element>();
 
-    return els;
+    outer:
+    for (int i = 1; i < elements.size(); i++) {
+      for (int j = 0; j < i; j++) {
+        if(result.size() >= limit) break outer;
+        Element a = elements.get(i);
+        Element b = elements.get(j);
+
+        if (Relation.findIn(relations, a, b) == null) {
+          /*
+           * sort algorithm has no relation for those elements.Present them to
+           * the user
+           */
+          result.add(a);
+          result.add(b);
+        }
+      }
+    }
+    
+    Logger.debug("added %s elements out of missing relations",result.size());
+
+    if (result.size() <= limit) {
+      /*
+       * cool we can take decisions on most elementsadd some random elements
+       */
+      while(result.size() < limit) {
+        result.add(elements.get((int) (Math.random() * elements.size())));
+      }
+      
+    }
+
+    return result;
   }
 
   public void doSort(DataSorter sorter) {

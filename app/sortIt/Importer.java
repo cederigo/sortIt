@@ -22,9 +22,9 @@ import sortIt.flickr.Photos.Photo;
 public class Importer {
   
 
-  public static boolean taggedWith(DataSet set, String tag, long[] attributeIds) {
+  public static boolean taggedWith(DataSet set, String tag, long[] attributeIds, int limit) {
 
-    Photos photos = FlickrApi.search(tag);
+    Photos photos = FlickrApi.search(tag, limit);
 
     if (photos != null && photos.pages > 0) {
 

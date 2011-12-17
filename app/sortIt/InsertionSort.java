@@ -42,16 +42,15 @@ public class InsertionSort implements DataSorter {
         }
         /* we inserted before, so the index has shifted */
         elements.remove(p + 1);
-      } 
+      } else {
+        Logger.debug("no decision for %s", pe.id);
+      }
     }
 
     /* update positions */
     int i = 0;
     for (Element e : elements) {
-      if (e.votes > 0)
         e.pos = i++;
-      else
-        e.pos = -1;
     }
 
   }

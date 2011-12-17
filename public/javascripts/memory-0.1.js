@@ -19,6 +19,9 @@
         dataSet = data;
         if (dataSet.eIds.length == 0) {
           alert("dataSet " + dataSet.name + " has no elements");
+        } else {
+          currentIdx = 0;
+          loadImage();
         }
       },
       error : function(jqXHR, textStatus, errorThrown) {
@@ -26,8 +29,9 @@
       }
     });
 
-  }, loadImage = function(eId) {
-
+  }, loadImage = function() {
+    
+    var eId = dataSet.eIds[currentIdx];
     var img = $("<img>");
    
     img.attr('id', 'image');
@@ -67,9 +71,12 @@
 
   window.sortIt = this;
 
-  this.load = function(setId) {
+  this.start = function(setId) {
     init(setId);
-    next();
+  };
+  
+  this.resume = function() {
+    votesCollected = 0;
   };
 
   this.next = function() {
@@ -79,13 +86,9 @@
     }
     
     lastIdx = currentIdx;
-    var rIdx = Math.floor(Math.random() * (dataSet.eIds.length));
-    while (rIdx == lastIdx) {
-      rIdx = Math.floor(Math.random() * (dataSet.eIds.length));
-    }
-    var eId = dataSet.eIds[rIdx];
-    loadImage(eId);
-    currentIdx = rIdx;
+    currentIdx = (currentIdx + 1) % dataSet.eIds.length;
+    
+    loadImage();
 
   };
   
@@ -101,15 +104,7 @@
       vote(false);
     }
     next();
-  };
-
-  this.skip = function() {
-    if (currentIdx) {
-      /*remove from elements and show next*/
-      dataSet.eIds.splice(currentIdx, 1);
-      next();
-    }
-  };
+  };  
   
   this.done = function() {
     if(votesCollected > 10) {

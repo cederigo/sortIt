@@ -40,8 +40,8 @@ public class FlickrApi {
     return getPhotos(API_SEARCH,"&tags=%s",tag);
   }
   
-  public static Photos search(String text) {
-    return getPhotos(API_SEARCH,"&text=%s&sort=relevance&per_page=50",text);
+  public static Photos search(String text, int limit) {
+    return getPhotos(API_SEARCH,"&text=%s&sort=relevance&per_page=%s",text,String.valueOf(limit));
   }
   
   public static String urlFor(Photo p, String size) {

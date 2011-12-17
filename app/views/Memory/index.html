@@ -28,12 +28,10 @@
   	}
   
     $(document).ready( function() {
-      sortIt.load(${setId});
-      
-      var url = window.location.href;
+      sortIt.start(${setId});
       
       $("#thanks-inner").click( function() {
-        window.location.replace(url+"?"+new Date().getTime())
+        sortIt.resume();
         toggleDialog();
       });
       

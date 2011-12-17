@@ -39,7 +39,7 @@ public class DataSets extends Controller {
     SortIt.index();
   }
   
-  public static void doImport(long setId, long[] attributeIds, String tag)
+  public static void doImport(long setId, long[] attributeIds, String tag, int limit)
       throws IOException {
 
     DataSet dataSet = DataSet.findById(setId);
@@ -53,7 +53,7 @@ public class DataSets extends Controller {
 
     boolean success = true;
     if (tag != null) {
-      success &= Importer.taggedWith(dataSet, tag, attributeIds);
+      success &= Importer.taggedWith(dataSet, tag, attributeIds, limit);
     }
 
     if (success) {
