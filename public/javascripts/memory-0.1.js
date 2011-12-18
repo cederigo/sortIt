@@ -3,7 +3,8 @@
   var dataSet,
     currentIdx,
     lastIdx,
-    votesCollected;
+    votesCollected,
+    cb;
 
   var init = function(setId) {
     dataSet = null;
@@ -61,6 +62,7 @@
       success : function(data, textStatus, req) {
         console.log("relation successfully added");
         votesCollected++;
+        cb();
       },
       error: function(jqXHR, textStatus, errorThrown) {
         console.log("faled to add relation! " + textStatus);
@@ -71,12 +73,16 @@
 
   window.sortIt = this;
 
-  this.start = function(setId) {
+  this.start = function(setId,progressCb) {
+    if (progressCb) {
+      cb = progressCb;
+    }
     init(setId);
   };
   
   this.resume = function() {
     votesCollected = 0;
+    cb();
   };
 
   this.next = function() {
@@ -86,10 +92,13 @@
     }
     
     lastIdx = currentIdx;
-    currentIdx = (currentIdx + 1) % dataSet.eIds.length;
+    currentIdx++;
     
-    loadImage();
-
+    if (currentIdx >= dataSet.eIds.length) {
+      this.start(dataSet.id);
+    } else {
+      loadImage();
+    }
   };
   
   this.yes = function() {

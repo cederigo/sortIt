@@ -177,6 +177,12 @@ header {
   padding: 36px 0px 36px 0px;
 }
 
+header #countdown {
+  position: absolute;
+  right: 0px;
+  top: 36px;
+}
+
 
 footer {
   height: 64px;

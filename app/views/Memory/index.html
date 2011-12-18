@@ -13,33 +13,26 @@
     type="text/javascript" charset="utf-8"></script>
   
   <script type="text/javascript">
-  
-  	
-  	function toggleDialog() {
-        
-  	  	var thanks  = $("#thanks");
-  	  	if (thanks.is(":visible")) {
-  	  	  thanks.hide();
-  	  	} else {
-  	  	  thanks.show();
-  	  	}
-  	  	
-  	}
-  
     $(document).ready( function() {
-      sortIt.start(${setId});
+      var votesNeeded = 10;
+      $('#countdown').html(votesNeeded);
       
-      $("#thanks-inner").click( function() {
-        sortIt.resume();
-        toggleDialog();
+      sortIt.start(${setId}, function () {
+        /*callback for progress*/
+        
+        $('#countdown').html(votesNeeded-this.progress());
+        
+        if (this.progress() >= votesNeeded) {
+          $('#thanks').show();
+        }
+        
       });
       
-      $("button").click( function() {
-        
-        if (sortIt.progress() >= 10) {
-          toggleDialog();
-        }
-      })
+      $("#thanks").click( function() {
+        sortIt.resume();
+        $(this).hide();
+      });
+      
     });
   </script>
 
@@ -50,7 +43,8 @@
   <header>
     <h1>SortIt</h1>
     <h3>Train your Memory</h3>
-    <p>Have a look at the faces and answer: Older?</p>  
+    <p>Have a look at the faces and choose from below..</p>
+    <h2 id="countdown">10</h2>  
   </header>
   
   <div id="thanks">
@@ -69,13 +63,11 @@
       <img id="image"></img>
     </div>
     
-    
     <div id="button-outer">
-        <button id="yes" onclick="sortIt.yes();">Yes</button>
-        <button id="no" onclick="sortIt.no();">No</button>
-        <button id="skip" onclick="sortIt.next();">Skip</button>
+        <button id="yes" onclick="sortIt.yes();">Older</button>
+        <button id="no" onclick="sortIt.no();">Younger</button>
+        <button id="skip" onclick="sortIt.next();">I don't know</button>
     </div>
-   
   
   </div>
   <footer>
@@ -87,44 +79,7 @@
   </footer>
 </div>
 
-<!-- FB stuff -->
-<div id="fb-root"></div>
-<script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '${play.configuration.getProperty("fb.api_key")}', // App ID
-      channelUrl : '', // Channel File
-      status     : true, // check login status
-      cookie     : true, // enable cookies to allow the server to access the session
-      xfbml      : false  // parse XFBML
-    });
-
-    // Additional initialization code here
-  };
-
-  // Load the SDK Asynchronously
-  (function(d){
-     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
-     js = d.createElement('script'); js.id = id; js.async = true;
-     js.src = "//connect.facebook.net/en_US/all.js";
-     d.getElementsByTagName('head')[0].appendChild(js);
-   }(document));
-  
-  function share() {
-
-    FB.ui({
-      method : 'feed',
-      link : "&{'feed_link'}",
-      picture : "@@{'/public/images/'}/&{'feed_picture'}",
-      name : "&{'feed_name'}",
-      caption : "&{'feed_caption'}",
-      description : "&{'feed_description'}"
-    });
-  }
-</script>
-
-
-
+#{include 'fb-js-sdk.html'/}
 
 </body>
 </html>
