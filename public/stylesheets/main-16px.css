@@ -215,7 +215,7 @@ footer .link.first {
   z-index: 99;
   position: absolute;
   top: 0px;
-  display: block;
+  display: none;
 }
 
 #thanks-inner {
