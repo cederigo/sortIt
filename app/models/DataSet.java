@@ -55,6 +55,7 @@ public class DataSet extends Model {
 
     /*order matters*/
     Set<Element> result = new LinkedHashSet<Element>();
+    Collections.sort(elements);
 
     outer:
     for (int i = 1; i < elements.size(); i++) {
