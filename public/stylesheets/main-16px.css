@@ -26,8 +26,8 @@ a img {
   border: 0;
 }
 
-a {
-  text-decoration: none;
+a, a:hover, a:visited {
+  color: black;
 }
 
 /*	Typography presets
@@ -215,7 +215,7 @@ footer .link.first {
   z-index: 99;
   position: absolute;
   top: 0px;
-  display: none;
+  display: block;
 }
 
 #thanks-inner {
