@@ -63,6 +63,15 @@ public class InsertionSort implements DataSorter {
       dest.add(el);
     }
   }
+  
+  private static Relation getFrom(Map<Integer, List<Relation>> candidates, int key, boolean first) {
+    if (first) {
+      return candidates.get(key).get(0);
+    } else {
+      List<Relation> list = candidates.get(key);
+      return list.get(list.size()-1);
+    }
+  }
 
   private static Relation resolveCandidates(Map<Integer, List<Relation>> candidates) {
 
@@ -74,29 +83,29 @@ public class InsertionSort implements DataSorter {
     // 0 -> 1
     if (!candidates.get(0).isEmpty() && !candidates.get(1).isEmpty()) {
       if (sumVotes(candidates.get(0)) > sumVotes(candidates.get(1))) {
-        result = candidates.get(0).get(0);
+        result = getFrom(candidates,0,true);
       } else {
-        result = candidates.get(1).get(0);
+        result = getFrom(candidates,1,false);
       }
     } else if (!candidates.get(-1).isEmpty() && !candidates.get(1).isEmpty()) {
       if (sumVotes(candidates.get(-1)) > sumVotes(candidates.get(1))) {
-        result = candidates.get(-1).get(0);
+        result = getFrom(candidates,-1,true);
       } else {
-        result = candidates.get(1).get(0);
+        result = getFrom(candidates,1,false);
       }
     } else if (!candidates.get(-1).isEmpty() && !candidates.get(0).isEmpty()) {
       if (sumVotes(candidates.get(-1)) > sumVotes(candidates.get(0))) {
-        result = candidates.get(-1).get(0);
+        result = getFrom(candidates,-1,true);
       } else {
-        result = candidates.get(0).get(0);
+        result = getFrom(candidates,0,true);
       }
     } else {
       if (!candidates.get(-1).isEmpty()) {
-        result = candidates.get(-1).get(0);
+        result = getFrom(candidates,-1,true);
       } else if (!candidates.get(0).isEmpty()) {
-        result = candidates.get(0).get(0);
+        result = getFrom(candidates,0,true);
       } else if (!candidates.get(1).isEmpty()) {
-        result = candidates.get(1).get(candidates.get(1).size() - 1);
+        result = getFrom(candidates,1,false);
       }
     }
 
