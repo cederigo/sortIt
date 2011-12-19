@@ -77,8 +77,10 @@ public class DataSet extends Model {
            */
           result.add(a);
           result.add(b);
-          j++;
-          break; //because otherwise we would always present the same element(a)
+          if(i < elements.size() -1) {            
+            j++;
+            break; //because otherwise we would always present the same element(a)
+          }
         }
         
       }
