@@ -38,16 +38,14 @@ public class Element extends Model implements Comparable<Element>{
   
   @Required
   public int pos = -1;
-  
-  public int votes = 0;
 
   public String toString() {
-    return "el id:" + id + ", votes:" + votes + ", set: " + set;
+    return "element[ id:" + id + ", set: " + set+"]";
   }
 
   @Override
   public int compareTo(Element o) {
-    return id > o.id ? 1 : (pos == 0 ? 0 : -1);
+    return id > o.id ? 1 : (id == 0 ? 0 : -1);
   }
  
 }

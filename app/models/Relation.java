@@ -30,6 +30,9 @@ public class Relation extends Model {
   @Required
   @OneToOne
   public Element b;
+  
+  public int votesA = 0;
+  public int votesB = 0;
 
   public String toString() {
     return a + " <-> " + b;
@@ -48,9 +51,9 @@ public class Relation extends Model {
       return 0;
     int res = 0;
     if (ref.equals(a)) {
-      res = a.votes - b.votes;
+      res = votesA - votesB;
     } else if (ref.equals(b)) {
-      res = b.votes - a.votes;
+      res = votesB - votesA;
     }
     return res == 0 ? 0 : res > 0 ? 1 : -1;
   }
@@ -61,11 +64,11 @@ public class Relation extends Model {
       return;
 
     if (e.equals(a)) {
-      a.votes++;
-      a.save();
+      votesA++;
+      save();
     } else if (e.equals(b)) {
-      b.votes++;
-      b.save();
+      votesB++;
+      save();
     }
   }
 
@@ -81,15 +84,15 @@ public class Relation extends Model {
 
   public int getVotesFor(Element e) {
     if (e.equals(a)) {
-      return a.votes;
+      return votesA;
     } else if (e.equals(b)) {
-      return b.votes;
+      return votesB;
     }
     return 0;
   }
 
   public int getVotes() {
-    return a.votes + b.votes;
+    return votesA + votesB;
   }
 
   @PreRemove
