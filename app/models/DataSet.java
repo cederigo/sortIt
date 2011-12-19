@@ -55,11 +55,17 @@ public class DataSet extends Model {
 
     /*order matters*/
     Set<Element> result = new LinkedHashSet<Element>();
-    Collections.sort(elements);
+    Collections.sort(elements); 
+    
+    /*start at a random pos*/
+    int i = 1 + (int)(Math.random()*(elements.size()-1));
+    int j = 0;
+    Logger.debug("starting with i=%s", i);
 
     outer:
-    for (int i = 1; i < elements.size(); i++) {
-      for (int j = 0; j < i; j++) {
+    for(;i < elements.size(); i++) {
+      
+      for (; j < i; j++) {
         if(result.size() >= limit) break outer;
         Element a = elements.get(i);
         Element b = elements.get(j);
@@ -71,8 +77,13 @@ public class DataSet extends Model {
            */
           result.add(a);
           result.add(b);
+          j++;
+          break; //because otherwise we would always present the same element(a)
         }
+        
       }
+      
+      
     }
     
     Logger.debug("added %s elements out of missing relations",result.size());
