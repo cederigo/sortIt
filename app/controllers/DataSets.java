@@ -67,9 +67,9 @@ public class DataSets extends Controller {
   
   
   
-  public static void get(@Required long id) {
+  public static void get(@Required long id, int limit) {
     DataSet set = DataSet.findById(id);
-    render(set);
+    render(set,limit);
   }
   
   public static void elements(@Required String name) {

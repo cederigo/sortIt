@@ -52,6 +52,10 @@ public class DataSet extends Model {
   }
 
   public Set<Element> nextElements(int limit) {
+    
+    if(limit >= elements.size()) {
+      limit = elements.size();
+    }
 
     /*order matters*/
     Set<Element> result = new LinkedHashSet<Element>();

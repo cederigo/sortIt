@@ -4,15 +4,15 @@
     currentIdx,
     lastIdx,
     votesCollected,
-    cb;
+    onVoteCollected;
 
-  var init = function(setId) {
+  var init = function(setId, votesToCollect) {
     dataSet = null;
-    currentIdx = null;
-    votesCollected = 0;
+    currentIdx = null; 
 
     $.ajax({
       url : '/dataSets/' + setId,
+      data : {limit: votesToCollect},
       dataType : 'json',
       async : false,
       success : function(data, textStatus, req) {
@@ -22,6 +22,7 @@
           alert("dataSet " + dataSet.name + " has no elements");
         } else {
           currentIdx = 0;
+          votesCollected = 0;
           loadImage();
         }
       },
@@ -61,30 +62,32 @@
       data: {setId: dataSet.id, aId: cEl, bId: lEl, isForA: isForCurrent},
       success : function(data, textStatus, req) {
         console.log("relation successfully added");
-        votesCollected++;
-        cb();
+        triggerVoteCollected();
       },
       error: function(jqXHR, textStatus, errorThrown) {
         console.log("faled to add relation! " + textStatus);
       }
     });
     
-  };
-
-  window.sortIt = this;
-
-  this.start = function(setId,progressCb) {
-    if (progressCb) {
-      cb = progressCb;
+  }, triggerVoteCollected = function() {
+    
+    onVoteCollected(++votesCollected);
+    
+    if (votesCollected >= dataSet.eIds.length) {
+      //restart
+      init(dataSet.id,dataSet.eIds.length);
     }
-    init(setId);
   };
   
-  this.resume = function() {
-    votesCollected = 0;
-    cb();
-  };
+  window.sortIt = this;
 
+  this.start = function(setId,votesToCollect, cb) {
+    if (cb) {
+      onVoteCollected = cb;
+    }
+    init(setId,votesToCollect);
+  };
+  
   this.next = function() {
 
     if (!dataSet) {
@@ -92,13 +95,10 @@
     }
     
     lastIdx = currentIdx;
-    currentIdx++;
+    currentIdx = (currentIdx + 1) % dataSet.eIds.length;
     
-    if (currentIdx >= dataSet.eIds.length) {
-      this.start(dataSet.id);
-    } else {
-      loadImage();
-    }
+    loadImage();
+    
   };
   
   this.yes = function() {
@@ -113,10 +113,6 @@
       vote(false);
     }
     next();
-  };
-  
-  this.progress = function() {
-    return votesCollected;
   };
 
 })();

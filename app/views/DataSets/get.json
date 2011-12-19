@@ -2,7 +2,7 @@
  "name" : "${set.name}",
  "id"	: "${set.id}",
  "eIds" : [ 
-	#{list items:set.nextElements(20), as:'e'}
+	#{list items:set.nextElements(limit), as:'e'}
 		${e.id} ${e_isLast ? '':','}
 	#{/list} 
 	]

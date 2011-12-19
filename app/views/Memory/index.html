@@ -21,21 +21,21 @@
   <script type="text/javascript">
     $(document).ready( function() {
       var votesNeeded = 10;
+      
       $('#countdown').html(votesNeeded);
       
-      sortIt.start(${setId}, function () {
-        /*callback for progress*/
+      sortIt.start(${setId},votesNeeded,function (votesCollected) {
         
-        $('#countdown').html(votesNeeded-this.progress());
+        $('#countdown').html(votesNeeded-votesCollected);
         
-        if (this.progress() >= votesNeeded) {
+        if (votesCollected >= votesNeeded) {
           $('#thanks').show();
+          $('#countdown').html(votesNeeded);
         }
         
       });
       
       $("#thanks").click( function() {
-        sortIt.resume();
         $(this).hide();
       });
       
