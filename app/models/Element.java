@@ -47,7 +47,7 @@ public class Element extends Model implements Comparable<Element>{
 
   @Override
   public int compareTo(Element o) {
-    return pos > o.pos ? 1 : (pos == 0 ? 0 : -1);
+    return id > o.id ? 1 : (pos == 0 ? 0 : -1);
   }
  
 }
