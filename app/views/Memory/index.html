@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Memory</title>
+  <meta property="og:title" content="SortIT - Memory" />
+  <meta property="og:type" content="game" />
+  <meta property="og:url" content="http://apps.facebook.com/sortit_" />
+  <meta property="og:image" content="" />
+  <meta property="og:site_name" content="SortIT" />
+  <meta property="fb:admins" content="702185546" />
   
   <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/main-16px.css'}">
        
@@ -14,7 +20,7 @@
   
   <script type="text/javascript">
     $(document).ready( function() {
-      var votesNeeded = 10;
+      var votesNeeded = 1;
       $('#countdown').html(votesNeeded);
       
       sortIt.start(${setId}, function () {
